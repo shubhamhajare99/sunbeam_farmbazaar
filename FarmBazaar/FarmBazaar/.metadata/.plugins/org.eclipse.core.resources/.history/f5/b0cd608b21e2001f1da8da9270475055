@@ -1,0 +1,79 @@
+package com.farmbazaar.controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import com.farmbazaar.pojos.Category;
+import com.farmbazaar.pojos.Customer;
+import com.farmbazaar.pojos.Farmer;
+import com.farmbazaar.pojos.Order;
+import com.farmbazaar.service.AdminService;
+import com.farmbazaar.service.ProductService;
+
+@RestController
+@RequestMapping("/admin")
+@CrossOrigin(origins = "http://localhost:3000")
+public class AdminController {
+
+	@Autowired
+	private AdminService adminService;
+
+	@Autowired
+	private ProductService productService;
+
+	// CRUD operations for categories
+
+	@PostMapping("/categories")
+	public Category createCategory(@RequestBody Category category) {
+		return adminService.createCategory(category);
+	}
+
+	@PutMapping("/categories/{id}")
+	public Category updateCategory(@PathVariable int id, @RequestBody Category categoryDetails) {
+		return adminService.updateCategory(id, categoryDetails);
+	}
+
+	@DeleteMapping("/categories/{id}")
+	public void deleteCategory(@PathVariable int id) {
+		adminService.deleteCategory(id);
+	}
+
+	@GetMapping("/categories")
+	public List<Category> getAllCategories() {
+		return adminService.getAllCategories();
+	}
+	
+	
+	// CRUD operations for Customer users
+
+	@DeleteMapping("/customer-users/{id}")
+	public void deleteCustomerUser(@PathVariable int id) {
+		adminService.deleteCustomerUser(id);
+	}
+
+	@GetMapping("/customer-users")
+	public List<Customer> getAllCustomerUsers() {
+		return adminService.getAllCustomerUsers();
+	}
+	
+	// CRUD operations for Farmer users
+	
+	@DeleteMapping("/farmer-users/{id}")
+	public void deleteFarmerUser(@PathVariable int id) {
+		adminService.deleteFarmerUser(id);
+	}
+
+	@GetMapping("/farmer-users")
+	public List<Farmer> getAllFarmerUsers() {
+		return adminService.getAllFarmerUsers();
+	}
+	
+	// Method to get all orders
+	@GetMapping("/orders")
+	public List<Order> getAllOrders() {
+		return adminService.getAllOrders();
+	}
+	
+}

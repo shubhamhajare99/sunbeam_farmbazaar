@@ -1,0 +1,19 @@
+package com.farmbazaar.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+import com.farmbazaar.service.AdminService;
+import com.farmbazaar.service.ProductService;
+
+@RestController
+@RequestMapping("/admin")
+@CrossOrigin(origins = "http://localhost:3000")
+public class AdminController {
+
+	@Autowired
+	private AdminService adminService;
+
+	@Autowired
+	private ProductService productService;
+
+}

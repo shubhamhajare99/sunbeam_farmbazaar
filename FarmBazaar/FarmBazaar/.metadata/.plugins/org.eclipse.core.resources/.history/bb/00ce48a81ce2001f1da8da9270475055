@@ -1,0 +1,39 @@
+package com.farmbazaar.controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import com.farmbazaar.pojos.Customer;
+import com.farmbazaar.service.AdminService;
+import com.farmbazaar.service.ProductService;
+
+@RestController
+@RequestMapping("/admin")
+@CrossOrigin(origins = "http://localhost:3000")
+public class AdminController {
+
+	@Autowired
+	private AdminService adminService;
+
+	@Autowired
+	private ProductService productService;
+
+	// CRUD operations for Customer users
+
+	@PutMapping("/customer-users/{id}")
+	public Customer updateCustomerUser(@PathVariable int id, @RequestBody Customer userDetails) {
+		return adminService.updateCustomerUser(id, userDetails);
+	}
+
+	@DeleteMapping("/customer-users/{id}")
+	public void deleteCustomerUser(@PathVariable int id) {
+		adminService.deleteCustomerUser(id);
+	}
+
+	@GetMapping("/customer-users")
+	public List<Customer> getAllCustomerUsers() {
+		return adminService.getAllCustomerUsers();
+	}
+}

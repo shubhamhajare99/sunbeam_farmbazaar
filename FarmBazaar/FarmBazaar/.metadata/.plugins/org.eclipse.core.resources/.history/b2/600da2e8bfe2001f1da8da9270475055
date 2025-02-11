@@ -1,0 +1,13 @@
+package com.farmbazaar.dao;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.query.Param;
+
+import com.farmbazaar.pojos.Category;
+
+public interface CategoryDao extends JpaRepository<Category, Integer> {
+
+	Category findByCatName(String catName);
+}
+
+

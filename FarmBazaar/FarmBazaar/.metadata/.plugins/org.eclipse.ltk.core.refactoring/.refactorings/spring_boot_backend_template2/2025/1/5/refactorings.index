@@ -1,0 +1,17 @@
+1738065963098	Rename package 'com.sunbeam.pojos'
+1738065989356	Rename package 'com.sunbeam.dao'
+1738066021090	Rename package 'com.sunbeam.controller'
+1738066042392	Rename package 'com.sunbeam.service'
+1738066086023	Rename package 'com.sunbeam'
+1738066120255	Rename package 'com.sunbeam.custom_exception'
+1738066255541	Rename type 'Category'
+1738066375139	Rename type 'Course'
+1738067342570	Rename type 'Student'
+1738067618113	Rename type 'CourseDao'
+1738067694598	Rename type 'StudentDao'
+1738068489851	Delete element
+1738068496048	Delete element
+1738072900866	Delete element
+1738209221689	Rename type 'TestController'
+1738304491767	Rename type 'UserService'
+1738304823652	Copy compilation unit
