@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.farmbazaar.dto.ApiResponse;
 import com.farmbazaar.pojos.Category;
@@ -52,12 +53,24 @@ public class AdminController {
 	// CRUD operations for Products
 	
 	@PostMapping("/products")
-	public ResponseEntity<ApiResponse> addProduct(@RequestBody Product product) {
-	    ApiResponse response = productService.addNewProduct(product);
-	    return ResponseEntity.status(HttpStatus.CREATED).body(response);
+	public Product addNewProduct(@RequestParam("name") String name, @RequestParam("price") double price,
+			@RequestParam("quantity") double quantity, @RequestParam("category_id") int categoryId, @RequestParam("imageFile") MultipartFile imageFile) {
+		return productService.addNewProduct(name, price, quantity, categoryId, imageFile);
 	}
-
+	/*
+	@PostMapping("/products")
+    public ApiResponse addNewProduct(@RequestBody Product product, @RequestParam Integer categoryId) {
+        return productService.addNewProduct(product, categoryId);
+    }
+    */
 	
+	@PutMapping("/products/{id}")
+	public Product updateProduct(@PathVariable int id, @RequestParam(required = false) MultipartFile imageFile,
+			@RequestParam("name") String name, @RequestParam("price") double price,
+			@RequestParam("quantity") double quantity) {
+		return productService.updateProductDetails(id, imageFile, name, price, quantity);
+	}
+	/*
 	@PutMapping("/products/{id}")
 	public ResponseEntity<String> updateProduct(@PathVariable Integer id, @RequestBody Product product) {
 	    product.setPid(id); // injecting the correct id into the product object so that right product is updated
@@ -67,7 +80,7 @@ public class AdminController {
 	    } else {
 	        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
 	    }
-	}
+	}*/
 
 	
 	@DeleteMapping("/products/{id}")

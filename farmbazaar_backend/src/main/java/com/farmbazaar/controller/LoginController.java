@@ -1,5 +1,6 @@
 package com.farmbazaar.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,8 +11,10 @@ import com.farmbazaar.service.LoginServiceImpl.LoginRequest;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
+@RequestMapping("/farmbazaar")
 public class LoginController {
 
+	@Autowired
 	private LoginServiceImpl loginService;
 	
     @PostMapping("/login")

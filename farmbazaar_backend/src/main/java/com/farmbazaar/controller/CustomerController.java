@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.farmbazaar.dto.ApiResponse;
@@ -39,6 +40,18 @@ public class CustomerController {
 		}
 	}
 	
+    @GetMapping("/{id}")
+    public ResponseEntity<Customer> getCustomerById(@PathVariable Integer id) {
+        Customer customer = customerService.getCustomerById(id);
+        return ResponseEntity.ok(customer);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Customer> updateCustomer(@PathVariable Integer id, @RequestBody Customer updatedCustomer) {
+        Customer customer = customerService.updateCustomer(id, updatedCustomer);
+        return ResponseEntity.ok(customer);
+    }
+	
 	
     @PostMapping("/cart/{customerId}/add")
     public ResponseEntity<?> addToCart(@PathVariable int customerId, @RequestBody CartItemRequest cartItemRequest) {
@@ -57,7 +70,7 @@ public class CustomerController {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok()
-                //.contentType(MediaType.APPLICATION_JSON) //optional(Explicitly sets the response's Content-Type to application/json)
+                .contentType(MediaType.APPLICATION_JSON) //optional(Explicitly sets the response's Content-Type to application/json)
                 .body(cartItems);
     }
     
@@ -78,31 +91,10 @@ public class CustomerController {
     }
     
     
-//    @GetMapping("/products")
-//    public List<Product> getAllProducts() {
-//        return customerService.getAllProducts();
-//    }
-
-
-	
-
-	/*
-	@PostMapping("/courses")
-	public ResponseEntity<Product> createCourse(@RequestBody Product course){
-		return new ResponseEntity<>(educationService.addCourse(course),HttpStatus.CREATED);
-	}
-	
-	 @PutMapping("/courses/{id}")
-	 public ResponseEntity<Product> updateCourse(@PathVariable Long id, @RequestBody Product updatedCourse) {
-	    return new ResponseEntity<>(educationService.updateCourse(id, updatedCourse), HttpStatus.OK);
-	}
-
-	 @GetMapping("/courses")
-	 public ResponseEntity<List<Product>> getCoursesByCategory(@RequestParam Role category) {
-	     return new ResponseEntity<>(educationService.getCoursesByCategory(category), HttpStatus.OK);
-	}
-*/
-	
+    @GetMapping("/products")
+    public List<Product> getAllProducts() {
+        return customerService.getAllProducts();
+    }	
 	
 	
 }
