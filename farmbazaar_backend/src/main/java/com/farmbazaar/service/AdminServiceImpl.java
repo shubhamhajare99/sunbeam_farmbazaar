@@ -66,7 +66,7 @@ public class AdminServiceImpl implements AdminService {
     public Category updateCategory(int id, Category categoryDetails) {
         Category category = categoryDao.findById(id).orElse(null);
         if (category != null) {
-            category.setCat_name(categoryDetails.getCat_name());
+            category.setName(categoryDetails.getName());
            
             return categoryDao.save(category);
         }
