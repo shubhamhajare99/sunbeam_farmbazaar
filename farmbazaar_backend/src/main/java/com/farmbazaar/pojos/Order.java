@@ -14,13 +14,14 @@ public class Order {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "order_id")
-    private int oid;
+    private int id;
 
     @ManyToOne
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL) 
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    @JsonBackReference 
     private List<OrderItem> orderItems;
     
     private double totalAmount;

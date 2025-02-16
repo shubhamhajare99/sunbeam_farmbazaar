@@ -14,7 +14,7 @@ public class Farmer extends User {
     @JoinTable(name = "farmer_product",
                joinColumns = @JoinColumn(name = "farmer_id"),
                inverseJoinColumns = @JoinColumn(name = "product_id"))
-    //@JsonIgnore // Exclude products from serialization to prevent recursion
+    @JsonIgnore // Exclude products from serialization to prevent recursion
     private List<Product> productsList;
 
     private double totalRevenue;

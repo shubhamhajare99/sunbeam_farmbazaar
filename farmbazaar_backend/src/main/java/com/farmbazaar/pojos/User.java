@@ -18,10 +18,7 @@ public class User{
 	@Column(name = "user_id")
 	private Integer id;
 	
-    @NotBlank
     private String email;
-
-    @NotBlank
     private String password;
 
     @Column(name = "fname")

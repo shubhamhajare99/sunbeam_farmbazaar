@@ -1,5 +1,8 @@
 package com.farmbazaar.pojos;
 
+import java.util.Base64;
+import java.util.List;
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
@@ -15,7 +18,7 @@ public class Product{
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer pid;
+	private Integer id;
 	
 	@NotBlank
 	private String name;
@@ -24,7 +27,10 @@ public class Product{
     private double quantity;
     
     @Lob
-    private byte[] image;
+    private byte[] image; // Byte array to store image data
+    
+    @Transient
+    private String imageBase64; // Attribute to store Base64-encoded image data
     
     
     @ManyToOne
@@ -41,7 +47,6 @@ public class Product{
     }
     
     
-    
    /* public Double getPriceForUser(User user) {
         if (user.getRole() == UserRole.CUSTOMER) {
             return basePrice * 1.10;  // 10% increase for customers
@@ -49,5 +54,9 @@ public class Product{
         return basePrice;  // Farmers pay the base price
     }*/
 
-	
+    public void encodeImageDataToBase64() {
+        if (image != null) {
+            this.imageBase64 = Base64.getEncoder().encodeToString(image);
+        }
+    }
 }

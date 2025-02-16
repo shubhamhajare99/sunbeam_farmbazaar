@@ -2,6 +2,8 @@ package com.farmbazaar.pojos;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -13,10 +15,12 @@ public class Category {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int cid;
+    private int id;
 
-    private String cat_name;
+   // @Column(name = "cat_name")
+    private String name;
 
     @OneToMany(mappedBy = "category")
+    @JsonIgnore
     private List<Product> products;
 }
