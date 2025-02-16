@@ -19,5 +19,7 @@ public interface CustomerService {
 	public String checkoutCart(int customerId, CheckoutRequest checkoutRequest);
 	public List<Order> getOrdersByCustomerId(int customerId);
 	public List<Product> getAllProducts();
+	public Customer getCustomerById(Integer id);
+	public Customer updateCustomer(Integer id, Customer updatedCustomer);
 	
 }

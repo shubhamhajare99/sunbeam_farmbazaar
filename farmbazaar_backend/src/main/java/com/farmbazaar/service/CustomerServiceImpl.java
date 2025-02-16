@@ -4,10 +4,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+//import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.farmbazaar.dao.CartDao;
@@ -42,18 +43,18 @@ public class CustomerServiceImpl implements CustomerService{
 	@Autowired
     private CartItemDao cartItemDao;
 	
-	
+	@Autowired
 	private OrderDao orderDao;
 	
 	
-	@Autowired
-    private BCryptPasswordEncoder passwordEncoder;
+//	@Autowired
+//    private BCryptPasswordEncoder passwordEncoder;
 	
 	@Override
 	public ApiResponse addNewCustomer(Customer transientCategory) {
 		
 		// Encrypt password before saving
-	    transientCategory.setPassword(passwordEncoder.encode(transientCategory.getPassword()));
+	    //transientCategory.setPassword(passwordEncoder.encode(transientCategory.getPassword()));
 	    
 		// set ID null to avoid StaleObjectStateException
 		transientCategory.setId(null);
@@ -64,6 +65,8 @@ public class CustomerServiceImpl implements CustomerService{
 	@Override
 	public List<Product> getAllProducts() {
 		List<Product> productsList = productDao.findAll();
+		// Encode image data to Base64 before sending
+        productsList.forEach(Product::encodeImageDataToBase64);
 		return productsList;
 	}
 	
@@ -94,7 +97,7 @@ public class CustomerServiceImpl implements CustomerService{
         Product product = optionalProduct.get();
 
         // Check if the cart already contains the product, update quantity if it does
-        CartItem existingCartItem = cart.getCartItemByProductId(product.getPid());
+        CartItem existingCartItem = cart.getCartItemByProductId(product.getId());
         if (existingCartItem != null) {
             existingCartItem.setQuantity(existingCartItem.getQuantity() + cartItemRequest.getQuantity());
         } else {
@@ -185,12 +188,14 @@ public class CustomerServiceImpl implements CustomerService{
             return new ArrayList<>(); // Return an empty list if cart is null
         }
 
-        List<CartItem> cartItemsList = cart.getCartItemsList();
+        List<CartItem> cartItems = cart.getCartItems();
         
-        return cartItemsList;
+        // Encode image data to Base64 for each product
+        return cartItems.stream()
+        		.peek(item -> item.getProduct().encodeImageDataToBase64()) // Ensure that imageBase64 is populated
+        		.collect(Collectors.toList());
 	
 	}
-	
 	
     public String checkoutCart(int customerId, CheckoutRequest checkoutRequest) {
         // Retrieve customer and cart
@@ -200,7 +205,7 @@ public class CustomerServiceImpl implements CustomerService{
         }
         Customer customer = optionalCustomer.get();
         Cart cart = customer.getCart();
-        if (cart == null || cart.getCartItemsList().isEmpty()) {
+        if (cart == null || cart.getCartItems().isEmpty()) {
             return "Error: Cart is empty";
         }
 
@@ -208,7 +213,7 @@ public class CustomerServiceImpl implements CustomerService{
         Order order = new Order();
         order.setCustomer(customer);
         order.setTotalAmount(cart.getTotalAmount()); // Set total amount from cart
-        order.setDeliveryStatus("Pending"); // Set initial delivery status
+        order.setDeliveryStatus("Delivered"); // Set initial delivery status
         order.setDeliveryAddress(checkoutRequest.getDeliveryAddress()); // Set delivery address
         
         order.setPlacedDate(new Date());// Set placed date
@@ -216,8 +221,9 @@ public class CustomerServiceImpl implements CustomerService{
      
         orderDao.save(order);// Save the order
 	
+        
         // Clear the cart
-        cart.getCartItemsList().clear();
+        cart.getCartItems().clear();
         cart.calculateTotalAmount();
         cartDao.save(cart);
 
@@ -227,6 +233,21 @@ public class CustomerServiceImpl implements CustomerService{
     
     public List<Order> getOrdersByCustomerId(int customerId) {
         return orderDao.findByCustomerId(customerId);
+    }
+    
+    public Customer getCustomerById(Integer id) {
+        return customerDao.findById(id)
+                .orElseThrow(() -> new RuntimeException("Customer not found"));
+    }
+
+    public Customer updateCustomer(Integer id, Customer updatedCustomer) {
+        Customer existingCustomer = customerDao.findById(id)
+                .orElseThrow(() -> new RuntimeException("Customer not found"));
+
+        existingCustomer.setAddress(updatedCustomer.getAddress());
+        existingCustomer.setMobileNo(updatedCustomer.getMobileNo());
+
+        return customerDao.save(existingCustomer);
     }
 	
 }
