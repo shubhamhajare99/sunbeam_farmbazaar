@@ -3,13 +3,13 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import logo from "../components/logo.png";
 import { ArrowRightOnRectangleIcon, ClipboardDocumentListIcon, ShoppingCartIcon } from "@heroicons/react/24/solid";
 
-const NavBar = () => {
+const FarmerNavbar = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
   useEffect(() => {
     const userData = JSON.parse(sessionStorage.getItem("userData"));
-    if (!userData || !userData.isLoggedIn || userData.role !== "CUSTOMER") {
+    if (!userData || !userData.isLoggedIn || userData.role !== "FARMER") {
       navigate("/");
     }
   }, [navigate]);
@@ -35,28 +35,8 @@ const NavBar = () => {
 
         {/* Right Section - Buttons */}
         <div className="flex space-x-6">
-        <Link to="/EditProfile">
-            <button className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
-              <ClipboardDocumentListIcon className="w-5 h-5" />
-              <span>Edit Profile</span>
-            </button>
-          </Link>
+         
 
-          {/* Orders Button */}
-          <Link to="/customer-orders">
-            <button className="flex items-center space-x-2 px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700">
-              <ClipboardDocumentListIcon className="w-5 h-5" />
-              <span>Orders</span>
-            </button>
-          </Link>
-
-          {/* Cart Button */}
-          <Link to="/customer-cart">
-            <button className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
-              <ShoppingCartIcon className="w-5 h-5" />
-              <span>My Cart</span>
-            </button>
-          </Link>
 
           {/* Logout Button */}
           <button onClick={handleSignOut} className="flex items-center space-x-2 px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700">
@@ -69,4 +49,4 @@ const NavBar = () => {
   );
 };
 
-export default NavBar;
+export default FarmerNavbar;
